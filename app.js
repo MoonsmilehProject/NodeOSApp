@@ -9,14 +9,32 @@ var express = require('express'),
 
 var bodyParser = require('body-parser');
 
+var myDB;
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
 
 // Routes
-app.get('/', function(req, res) {
-	res.send('Server is alive');
+app.get('/chat-api/getUserList', function(req, res) {
+
+    MongoClient.connect('mongodb://localhost:27017/chatiw', function(err,db){
+        assert.equal(null, err);
+        console.log("Successfully connected to mongoDB");
+        db.collection('users').find({}).toArray(function(err,docs){
+            console.log(docs);  
+            var users = {"users":docs,"messageCode":200, "response":"User list found, u're welcome"};
+            res.send(users);
+
+        });
+    });
+	
+	var usersObject = {"users":[{"name":"Aldair Guillermo Avalos Sanchéz", "idUser":"al102@gmail.com"},
+								   {"name":"Ximena Flores Acevedo", "idUser":"xla10@gmail.com"},
+								   {"name":"Andrea López Silva", "idUser":"andyLove@gmail.com"},
+								   {"name":"Amairani Perez Casas"}], "messageCode":200, "response":"User list found, u're welcome"};
+	;
 });
 
 
@@ -24,18 +42,6 @@ app.post('/payment', function(req,res) {
 	console.log('JSON Received: '+req.body);
 	console.log('Name: '+req.body.name);
 });
-
-MongoClient.connect('mongodb://localhost:27017/video', function(err,db){
-	assert.equal(null, err);
-	console.log("Successfully connected to mongoDB");
-	app.get('/movies', function(req, res){
-		db.collection('movies').find({}).toArray(function(err,docs){
-			//res.render('movies', {'movies':docs});
-			res.json(docs);
-		});
-	});
-});
-
 
 app.listen(port, function(){
 	console.log('Listening in port: '+port);
