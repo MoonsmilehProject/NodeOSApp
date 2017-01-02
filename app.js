@@ -5,7 +5,11 @@ var express = require('express'),
 	app = express(),
 	MongoClient = require('mongodb').MongoClient,
 	port = Number(process.env.PORT || 8080),
-    assert = require('assert');
+    assert = require('assert')
+    bodyParser = require('body-parser');
+
+ app.use(bodyParser.json());
+ app.use(bodyParser.urlencoded({extended:true})); 
 
 var conekta = require('conekta');
 
@@ -35,9 +39,11 @@ console.log('Ewe, acercate más we');
 });
 
 
-app.post('/', function(req,res) {
-	console.log('JSON Received: '+req.body);
+app.post('/api/donation', function(req,res) {
+	var username = req.body.userdata;
+	console.log('Username: '+ username.name+ ' with amount: '+username.amount);
 
+/*
 	conekta.api_key = "key_gwFSd2HtH6AAS7V6h1LaHA";
 	conekta.Charge.create({
   "description":"Stogies",
