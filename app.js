@@ -39,10 +39,22 @@ console.log('Ewe, acercate más we');
 });
 
 
-app.post('/api/donation', function(req,res) {
-	var username = req.body.userdata;
-	console.log('Username: '+ username.name+ ' with amount: '+username.amount);
+app.post('/api/donate/card.json', function(req,res) {
+	var userdata = req.body;
+	/*
+	final String tokenCard;
+        final String numberCard;
+        final String nameCard;
+        final String dateCard;
+        final String ccvCard;
+        final int amount;*/
 
+	console.log('Username: '+ userdata.nameCard);
+	console.log('Card number: '+ userdata.numberCard);
+	console.log('Amount: '+ userdata.amount);
+
+	var users = {"messageCode":200, "response":"User list found, u're welcome"};
+    res.send(users);
 /*
 	conekta.api_key = "key_gwFSd2HtH6AAS7V6h1LaHA";
 	conekta.Charge.create({
