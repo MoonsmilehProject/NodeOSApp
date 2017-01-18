@@ -39,66 +39,66 @@ console.log('Ewe, acercate más we');
 });
 
 
-app.post('/api/donate/card.json', function(req,res) {
+app.post('/api/donate/card.json', function(req, response) {
 	var userdata = req.body;
-	/*
-	final String tokenCard;
-        final String numberCard;
-        final String nameCard;
-        final String dateCard;
-        final String ccvCard;
-        final int amount;*/
 
-	console.log('Username: '+ userdata.nameCard);
-	console.log('Card number: '+ userdata.numberCard);
-	console.log('Amount: '+ userdata.amount);
+	console.log('Payment received by: '+ userdata.username + " with card number: "+userdata.numberCard);
 
-	var users = {"messageCode":200, "response":"User list found, u're welcome"};
-    res.send(users);
-/*
 	conekta.api_key = "key_gwFSd2HtH6AAS7V6h1LaHA";
 	conekta.Charge.create({
-  "description":"Stogies",
-  "amount": 20000,
-  "currency":"MXN",
-  "reference_id":"9839-wolf_pack",
-  "card": "tok_test_visa_4242",
-  "details": {
-    "name": "Humberto Solano",
-    "phone": "403-342-0642",
-    "email": "moonsmileh.project@gmail.com",
-    "customer": {
-      "logged_in": true,
-      "successful_purchases": 14,
-      "created_at": 1379784950,
-      "updated_at": 1379784950,
-      "offline_payments": 4,
-      "score": 9
-    },
-    "line_items": [{
-      "name": "Box of Cohiba S1s",
-      "description": "Imported From Mex.",
-      "unit_price": 20000,
+    	"description":"Stogies",
+  		"amount": userdata.amount,
+  		"currency":"MXN",
+  		"reference_id":"2017-donacion_app",
+  		"card": userdata.tokenCard,
+  		"details": {
+    		"name": userdata.username,
+    		"phone": userdata.phone,
+    		"email": userdata.email,
+    		"customer": {
+      			"logged_in": true,
+      			"successful_purchases": 1,
+      			"created_at": 1379784950,
+      			"updated_at": 1379784950,
+      			"offline_payments": 0,
+      			"score": 10
+    		},
+    		"line_items": [{
+      			"name": "Donativo a Olimpiadas Especiales",
+      			"description": "Donativo por transacción bancaria al programa Olimpiadas Especiales de México.",
+      			"unit_price": userdata.amount,
       "quantity": 1,
-      "sku": "cohb_s1",
-      "category": "food"
+      "sku": "donativo_app",
+      "category": "Donaciones"
     }],
     "billing_address": {
-      "street1":"77 Mystery Lane",
-      "street2": "Suite 124",
+      "street1":"Av del conscripto s/n, col. Lomas de sotelo",
+      "street2": "Delegación Miguel Hidalgo",
       "street3": null,
-      "city": "Darlington",
-      "state":"NJ",
-      "zip": "10192",
-      "country": "Mexico",
-      "tax_id": "xmn671212drx",
-      "company_name":"X-Men Inc.",
-      "phone": "77-777-7777",
-      "email": "moonsmileh.project@gmail.com"
+      "city": "Ciudad de México",
+      "state":"",
+      "zip": "11200",
+      "country": "México",
+      "tax_id": "OEM870708JI2",
+      "company_name":"Olimpiadas Especiales de Mexico AC",
+      "phone": "5255-0359",
+      "email": "jcruz@olimpiadasespeciales.org.mx"
     }
   }
 }, function(err, res) {
-    console.log(res.toObject());
+	if(res != null){
+		console.log("Response from server: ");
+    	console.log(res.toObject());
+    	if(res.toObject().failure_code == null){
+    		var users = {"messageCode":200, "response":"Your payment has been processed ok"};
+    		response.send(users);
+    	}
+	} 
+	else if(err != null){
+		console.log(err);
+		var users = {"messageCode":402, "response":"Ocurred a problem with your card"};
+    		response.send(users);
+	}
 });
 	/*
 	conekta.Charge.create({
